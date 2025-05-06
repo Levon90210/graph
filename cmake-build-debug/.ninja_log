@@ -1,0 +1,3 @@
+# ninja log v6
+1	394	1746541862621026495	tests/CMakeFiles/ShortestPathsTest.dir/shortest_paths_test.cpp.o	5a856cab09893289
+395	464	1746541863014031824	tests/ShortestPathsTest	ef5f64987ec84198
