@@ -1,6 +1,8 @@
 #ifndef EDGE_H
 #define EDGE_H
-#include <bits/stdc++.h>
+
+#include <cstddef>
+#include <functional>
 #include "node.h"
 
 template <class T, class L>
@@ -18,7 +20,7 @@ public:
 template <class T, class L>
 class EdgeHash {
 public:
-    size_t operator()(const Edge<T, L>& e) const;
+    std::size_t operator()(const Edge<T, L>& e) const;
 };
 
 #endif //EDGE_H

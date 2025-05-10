@@ -1,10 +1,13 @@
 #ifndef GRAPH_H
 #define GRAPH_H
 
+#include <iostream>
+#include <vector>
 #include <forward_list>
 #include <queue>
 #include <unordered_set>
 #include <unordered_map>
+#include <limits>
 #include "edge.h"
 
 template <class T, class L>
@@ -30,7 +33,7 @@ public:
 
     explicit Graph(const Matrix<T, L>& m);
 
-    // explicit Graph(const AdjList<T>& adj);
+    explicit Graph(const AdjList<T>& adj);
 
     bool addNode(const T& v);
 
@@ -49,6 +52,10 @@ public:
     std::vector<T> findPath(const T& start, const T& end);
 
     std::unordered_map<T, std::vector<T>> getShortestPaths(const T& start);
+
+    Matrix<T, L> floydWarshall();
+
+    void printFloydWarshall() const;
 };
 
 #endif //GRAPH_H

@@ -3,10 +3,8 @@
 template <class T, class L>
 Graph<T, L>::Graph() : m_allNodes(), m_inEdges(), m_outEdges() {}
 
-
-// Matrix = std::unordered_map<T, std::unordered_map<T, L>>
 template <class T, class L>
-Graph<T, L>::Graph(const Matrix<T, L>& m) {
+Graph<T, L>::Graph(const Matrix<T, L>& m) { // Matrix<T, L> = std::unordered_map<T, std::unordered_map<T, L>>
     for (const auto& [source, neighbors] : m) {
         addNode(source);
         for (const auto& [destination, weight] : neighbors) {
@@ -16,18 +14,18 @@ Graph<T, L>::Graph(const Matrix<T, L>& m) {
     }
 }
 
-// template <class T, class L>
-// Graph<T, L>::Graph(const AdjList<T>& adj) {
-//     for (int i = 0; i < adj.size(); ++i) {
-//         addNode(i);
-//     }
-//
-//     for (int i = 0; i < adj.size(); ++i) {
-//         for (const auto& v : adj[i]) {
-//             addEdge(i, v, 0);
-//         }
-//     }
-// }
+template <class T, class L>
+Graph<T, L>::Graph(const AdjList<T>& adj) {
+    for (int i = 0; i < adj.size(); ++i) {
+        addNode(i);
+    }
+
+    for (int i = 0; i < adj.size(); ++i) {
+        for (const auto& v : adj[i]) {
+            addEdge(i, v, 0);
+        }
+    }
+}
 
 template <class T, class L>
 bool Graph<T, L>::addNode(const T& v) {
@@ -217,6 +215,46 @@ std::unordered_map<T, std::vector<T>> Graph<T, L>::getShortestPaths(const T& sta
     }
     return paths;
 }
+
+
+template <class T, class L>
+Matrix<T, L> Graph<T, L>::floydWarshall() { // Matrix<T, L> = std::unordered_map<T, std::unordered_map<T, L>>
+    Matrix<T, L> distances;
+
+    for (const auto& [val1, _] : m_allNodes) {
+        for (const auto& [val2, _] : m_allNodes) {
+            if (val1 != val2) {
+                distances[val1][val2] = std::numeric_limits<L>::max();
+            } else {
+                distances[val1][val2] = 0;
+            }
+        }
+    }
+
+    for (const auto& [val, edges] : m_outEdges) {
+        for (const auto& edge : edges) {
+            distances[val][edge.destination->value] = edge.label;
+        }
+    }
+
+    for (const auto& [k, _] : m_allNodes) {
+        for (const auto& [i, _] : m_allNodes) {
+            for (const auto& [j, _] : m_allNodes) {
+                if (distances[i][k] != std::numeric_limits<L>::max() &&
+                    distances[k][j] != std::numeric_limits<L>::max())
+                {
+                    distances[i][j] = std::min(distances[i][j], distances[i][k] + distances[k][j]);
+                }
+
+            }
+        }
+    }
+
+    return distances;
+}
+
+template <class T, class L>
+void Graph<T, L>::printFloydWarshall() const {}
 
 template class Graph<int, int>;
 template class Graph<char, int>;
