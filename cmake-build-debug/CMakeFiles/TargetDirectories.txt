@@ -1,7 +1,0 @@
-/home/levon/CLionProjects/Algorithms/Graph/cmake-build-debug/CMakeFiles/test.dir
-/home/levon/CLionProjects/Algorithms/Graph/cmake-build-debug/CMakeFiles/edit_cache.dir
-/home/levon/CLionProjects/Algorithms/Graph/cmake-build-debug/CMakeFiles/rebuild_cache.dir
-/home/levon/CLionProjects/Algorithms/Graph/cmake-build-debug/tests/CMakeFiles/ShortestPathsTest.dir
-/home/levon/CLionProjects/Algorithms/Graph/cmake-build-debug/tests/CMakeFiles/test.dir
-/home/levon/CLionProjects/Algorithms/Graph/cmake-build-debug/tests/CMakeFiles/edit_cache.dir
-/home/levon/CLionProjects/Algorithms/Graph/cmake-build-debug/tests/CMakeFiles/rebuild_cache.dir
