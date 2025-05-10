@@ -1,0 +1,10 @@
+cmake-build-debug
+
+*.o
+*.obj
+*.exe
+*.out
+
+external/
+
+.idea/

@@ -1,32 +1,33 @@
 #include "graph.h"
 
 template <class T, class L>
-Graph<T, L>::Graph(const Matrix<T>& m) {
-    for (int i = 0; i < m.size(); ++i) {
-        addNode(i);
-    }
+Graph<T, L>::Graph() : m_allNodes(), m_inEdges(), m_outEdges() {}
 
-    for (int i = 0; i < m.size(); ++i) {
-        for (int j = 0; j < m.size(); ++j) {
-            if (m[i][j] == 1) {
-                addEdge(i, j, 0);
-            }
-        }
-    }
-}
 
+// Matrix = std::unordered_map<T, std::unordered_map<T, L>>
 template <class T, class L>
-Graph<T, L>::Graph(const AdjList<T>& adj) {
-    for (int i = 0; i < adj.size(); ++i) {
-        addNode(i);
-    }
-
-    for (int i = 0; i < adj.size(); ++i) {
-        for (const auto& v : adj[i]) {
-            addEdge(i, v, 0);
+Graph<T, L>::Graph(const Matrix<T, L>& m) {
+    for (const auto& [source, neighbors] : m) {
+        addNode(source);
+        for (const auto& [destination, weight] : neighbors) {
+            addNode(destination);
+            addEdge(source, destination, weight);
         }
     }
 }
+
+// template <class T, class L>
+// Graph<T, L>::Graph(const AdjList<T>& adj) {
+//     for (int i = 0; i < adj.size(); ++i) {
+//         addNode(i);
+//     }
+//
+//     for (int i = 0; i < adj.size(); ++i) {
+//         for (const auto& v : adj[i]) {
+//             addEdge(i, v, 0);
+//         }
+//     }
+// }
 
 template <class T, class L>
 bool Graph<T, L>::addNode(const T& v) {
@@ -54,7 +55,7 @@ bool Graph<T, L>::addEdge(const T& source, const T& dest, const L& label) {
         return false;
     }
     m_inEdges[dest].insert(newEdge);
-    m_OutEdges[source].insert(newEdge);
+    m_outEdges[source].insert(newEdge);
     return true;
 }
 
@@ -165,7 +166,7 @@ std::vector<T> Graph<T, L>::findPath(const T& start, const T& end) {
 }
 
 template <class T, class L>
-std::vector<std::vector<T>> Graph<T, L>::getShortestPaths(const T& start) {
+std::unordered_map<T, std::vector<T>> Graph<T, L>::getShortestPaths(const T& start) {
     std::unordered_map<T, L> distances;
     std::unordered_map<T, Node<T>*> previous;
     for (const auto &[val, node] : m_allNodes) {
@@ -180,28 +181,42 @@ std::vector<std::vector<T>> Graph<T, L>::getShortestPaths(const T& start) {
     while (!pq.empty()) {
         auto [currDist, currNode] = pq.top();
         pq.pop();
+
+        if (currDist > distances[currNode]) {
+            continue;
+        }
+
         for (const auto &edge : m_outEdges[currNode]) {
             auto nextNode = edge.destination->value;
             if (currDist + edge.label < distances[nextNode]) {
                 distances[nextNode] = currDist + edge.label;
-                previous[nextNode] = currNode;
+                previous[nextNode] = m_allNodes[currNode];
                 pq.push({distances[nextNode], nextNode});
             }
         }
     }
 
-    std::vector<std::vector<T>> paths;
-    for (const auto &[val, node] : m_allNodes) {
-        std::vector<T> path;
-        while (node != nullptr) {
-            path.push_back(node->value);
-            node = previous[node->value];
+    std::unordered_map<T, std::vector<T>> paths;
+    for (const auto& [value, _] : m_allNodes) {
+        if (distances[value] == std::numeric_limits<L>::max()) {
+            continue;
         }
-        std::reverse(path.begin(), path.end());
-    }
 
+        std::vector<T> path;
+        T current = value;
+
+        while (previous[current] != nullptr) {
+            path.push_back(current);
+            current = previous[current]->value;
+        }
+
+        path.push_back(start);
+        std::reverse(path.begin(), path.end());
+
+        paths[value] = path;
+    }
     return paths;
 }
 
-
 template class Graph<int, int>;
+template class Graph<char, int>;

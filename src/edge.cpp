@@ -20,3 +20,5 @@ size_t EdgeHash<T, L>::operator()(const Edge<T, L>& e) const {
 
 template class Edge<int, int>;
 template class EdgeHash<int, int>;
+template class Edge<char, int>;
+template class EdgeHash<char, int>;

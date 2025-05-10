@@ -7,8 +7,8 @@
 #include <unordered_map>
 #include "edge.h"
 
-template <class T>
-using Matrix = std::vector<std::vector<T>>;
+template <class T, class L>
+using Matrix = std::unordered_map<T, std::unordered_map<T, L>>;
 
 template <class T>
 using AdjList = std::vector<std::forward_list<T>>;
@@ -26,11 +26,11 @@ class Graph {
     bool findPathDFS(const T& start, const T& end, std::vector<T>& path);
 
 public:
-    Graph() : m_allNodes(), m_inEdges(), m_outEdges() {}
+    Graph();
 
-    explicit Graph(const Matrix<T>& m);
+    explicit Graph(const Matrix<T, L>& m);
 
-    explicit Graph(const AdjList<T>& adj);
+    // explicit Graph(const AdjList<T>& adj);
 
     bool addNode(const T& v);
 
@@ -48,7 +48,7 @@ public:
 
     std::vector<T> findPath(const T& start, const T& end);
 
-    std::vector<std::vector<T>> getShortestPaths(const T& start);
+    std::unordered_map<T, std::vector<T>> getShortestPaths(const T& start);
 };
 
 #endif //GRAPH_H
