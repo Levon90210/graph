@@ -16,11 +16,16 @@ TEST(GraphTest, SmallGraph) {
     const auto mst = g.mstKruskal();
 
     EXPECT_EQ(mst.size(), 5);
-    EXPECT_EQ(mst[0].label, 2);
-    EXPECT_EQ(mst[1].label, 3);
-    EXPECT_EQ(mst[2].label, 4);
-    EXPECT_EQ(mst[3].label, 5);
-    EXPECT_EQ(mst[4].label, 8);
+    EXPECT_EQ(mst[0].first, 1);
+    EXPECT_EQ(mst[0].second, 5);
+    EXPECT_EQ(mst[1].first, 1);
+    EXPECT_EQ(mst[1].second, 3);
+    EXPECT_EQ(mst[2].first, 2);
+    EXPECT_EQ(mst[2].second, 3);
+    EXPECT_EQ(mst[3].first, 0);
+    EXPECT_EQ(mst[3].second, 2);
+    EXPECT_EQ(mst[4].first, 2);
+    EXPECT_EQ(mst[4].second, 4);
 }
 
 TEST(GraphTest, BigGraph) {
@@ -42,13 +47,14 @@ TEST(GraphTest, BigGraph) {
     const auto mst = g.mstKruskal();
 
     EXPECT_EQ(mst.size(), 9);
-    EXPECT_EQ(mst[0].label, 1);
-    EXPECT_EQ(mst[1].label, 2);
-    EXPECT_EQ(mst[2].label, 3);
-    EXPECT_EQ(mst[3].label, 4);
-    EXPECT_EQ(mst[4].label, 5);
-    EXPECT_EQ(mst[5].label, 6);
-    EXPECT_EQ(mst[6].label, 8);
-    EXPECT_EQ(mst[7].label, 8);
-    EXPECT_EQ(mst[8].label, 9);
+    EXPECT_EQ(mst[0].first, "v6");
+    EXPECT_EQ(mst[0].second, "v5");
+    EXPECT_EQ(mst[1].first, "v1");
+    EXPECT_EQ(mst[1].second, "v6");
+    EXPECT_EQ(mst[2].first, "v2");
+    EXPECT_EQ(mst[2].second, "v1");
+    EXPECT_EQ(mst[3].first, "v1");
+    EXPECT_EQ(mst[3].second, "v0");
+    EXPECT_EQ(mst[4].first, "v5");
+    EXPECT_EQ(mst[4].second, "v8");
 }

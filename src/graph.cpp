@@ -1,6 +1,5 @@
 #include "graph.h"
 
-#include <set>
 
 template <class T, class L>
 Graph<T, L>::Graph() : m_allNodes(), m_inEdges(), m_outEdges() {}
@@ -273,7 +272,7 @@ std::vector<Edge<T, L>> Graph<T, L>::getUndirectedEdges() const {
 }
 
 template <class T, class L>
-std::vector<Edge<T, L>> Graph<T, L>::mstKruskal() {
+std::vector<std::pair<T, T>> Graph<T, L>::mstKruskal() {
     auto edges = getUndirectedEdges();
 
     for (const auto& [val, node] : m_allNodes) {
@@ -284,13 +283,14 @@ std::vector<Edge<T, L>> Graph<T, L>::mstKruskal() {
         return a.label < b.label;
     });
 
-    std::vector<Edge<T, L>> results;
+
+    std::vector<std::pair<T, T>> results;
     for (const auto& edge : edges) {
         Node<T>* srcRoot = DisjointSet<T>::findSet(edge.source);
         Node<T>* destRoot = DisjointSet<T>::findSet(edge.destination);
 
         if (srcRoot != destRoot) {
-            results.push_back(edge);
+            results.push_back({edge.source->value, edge.destination->value});
             DisjointSet<T>::unionSet(destRoot, srcRoot);
         }
     }

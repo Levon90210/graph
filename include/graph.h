@@ -5,6 +5,7 @@
 #include <vector>
 #include <forward_list>
 #include <queue>
+#include <set>
 #include <unordered_set>
 #include <unordered_map>
 #include <limits>
@@ -58,7 +59,7 @@ public:
 
     Matrix<T, L> floydWarshall();
 
-    std::vector<Edge<T, L>> mstKruskal();
+    std::vector<std::pair<T, T>> mstKruskal();
 };
 
 #endif //GRAPH_H

@@ -6,7 +6,7 @@
 template <class T>
 class DisjointSet {
 public:
-    static Node<T> *makeSet(Node<T> *root);
+    static void makeSet(Node<T> *root);
 
     static Node<T> *findSet(Node<T> *root);
 
