@@ -9,6 +9,7 @@
 #include <unordered_map>
 #include <limits>
 #include "edge.h"
+#include "disjoint_set.h"
 
 template <class T, class L>
 using Matrix = std::unordered_map<T, std::unordered_map<T, L>>;
@@ -24,6 +25,8 @@ class Graph {
 
     Node<T> *getNode(const T& data);
 
+    std::vector<Edge<T, L>> getUndirectedEdges() const;
+
     void dfsVisit(const T& start);
 
     bool findPathDFS(const T& start, const T& end, std::vector<T>& path);
@@ -33,7 +36,7 @@ public:
 
     explicit Graph(const Matrix<T, L>& m);
 
-    explicit Graph(const AdjList<T>& adj);
+    // explicit Graph(const AdjList<T>& adj);
 
     bool addNode(const T& v);
 
@@ -55,7 +58,7 @@ public:
 
     Matrix<T, L> floydWarshall();
 
-    void printFloydWarshall() const;
+    std::vector<Edge<T, L>> mstKruskal();
 };
 
 #endif //GRAPH_H

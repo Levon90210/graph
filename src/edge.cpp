@@ -22,3 +22,5 @@ template class Edge<int, int>;
 template class EdgeHash<int, int>;
 template class Edge<char, int>;
 template class EdgeHash<char, int>;
+template class Edge<std::string, int>;
+template class EdgeHash<std::string, int>;

@@ -1,5 +1,7 @@
 #include "graph.h"
 
+#include <set>
+
 template <class T, class L>
 Graph<T, L>::Graph() : m_allNodes(), m_inEdges(), m_outEdges() {}
 
@@ -14,18 +16,18 @@ Graph<T, L>::Graph(const Matrix<T, L>& m) { // Matrix<T, L> = std::unordered_map
     }
 }
 
-template <class T, class L>
-Graph<T, L>::Graph(const AdjList<T>& adj) {
-    for (int i = 0; i < adj.size(); ++i) {
-        addNode(i);
-    }
-
-    for (int i = 0; i < adj.size(); ++i) {
-        for (const auto& v : adj[i]) {
-            addEdge(i, v, 0);
-        }
-    }
-}
+// template <class T, class L>
+// Graph<T, L>::Graph(const AdjList<T>& adj) {
+//     for (int i = 0; i < adj.size(); ++i) {
+//         addNode(i);
+//     }
+//
+//     for (int i = 0; i < adj.size(); ++i) {
+//         for (const auto& v : adj[i]) {
+//             addEdge(i, v, 0);
+//         }
+//     }
+// }
 
 template <class T, class L>
 bool Graph<T, L>::addNode(const T& v) {
@@ -216,7 +218,6 @@ std::unordered_map<T, std::vector<T>> Graph<T, L>::getShortestPaths(const T& sta
     return paths;
 }
 
-
 template <class T, class L>
 Matrix<T, L> Graph<T, L>::floydWarshall() { // Matrix<T, L> = std::unordered_map<T, std::unordered_map<T, L>>
     Matrix<T, L> distances;
@@ -254,7 +255,49 @@ Matrix<T, L> Graph<T, L>::floydWarshall() { // Matrix<T, L> = std::unordered_map
 }
 
 template <class T, class L>
-void Graph<T, L>::printFloydWarshall() const {}
+std::vector<Edge<T, L>> Graph<T, L>::getUndirectedEdges() const {
+    std::vector<Edge<T, L>> edges;
+    std::set<std::pair<T, T>> visited;
+    for (const auto& [val, node] : m_allNodes) {
+        for (const auto& edge : m_outEdges.at(val)) {
+            T u = edge.source->value;
+            T v = edge.destination->value;
+            if (u > v) std::swap(u, v);
+            if (!visited.contains({u, v})) {
+                visited.emplace(u, v);
+                edges.push_back(edge);
+            }
+        }
+    }
+    return edges;
+}
+
+template <class T, class L>
+std::vector<Edge<T, L>> Graph<T, L>::mstKruskal() {
+    auto edges = getUndirectedEdges();
+
+    for (const auto& [val, node] : m_allNodes) {
+        DisjointSet<T>::makeSet(node);
+    }
+
+    std::sort(edges.begin(), edges.end(), [](Edge<T, L> a, Edge<T, L> b) {
+        return a.label < b.label;
+    });
+
+    std::vector<Edge<T, L>> results;
+    for (const auto& edge : edges) {
+        Node<T>* srcRoot = DisjointSet<T>::findSet(edge.source);
+        Node<T>* destRoot = DisjointSet<T>::findSet(edge.destination);
+
+        if (srcRoot != destRoot) {
+            results.push_back(edge);
+            DisjointSet<T>::unionSet(destRoot, srcRoot);
+        }
+    }
+
+    return results;
+}
 
 template class Graph<int, int>;
 template class Graph<char, int>;
+template class Graph<std::string, int>;
